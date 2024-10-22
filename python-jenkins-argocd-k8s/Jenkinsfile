@@ -20,6 +20,7 @@ pipeline {
             steps{
                 script{
                     sh '''
+                    cd python-jenkins-argocd-k8s
                     echo 'Buid Docker Image'
                     docker build -t yasir/cicd-e2e:${BUILD_NUMBER} .
                     '''
