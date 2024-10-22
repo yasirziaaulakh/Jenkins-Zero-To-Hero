@@ -22,7 +22,7 @@ pipeline {
                     sh '''
                     cd python-jenkins-argocd-k8s
                     echo 'Buid Docker Image'
-                    docker build -t yasirzia/cicd-e2e:${BUILD_NUMBER} .
+                    docker build -t yasirzia/todo-app:${BUILD_NUMBER} .
                     '''
                 }
             }
@@ -37,7 +37,7 @@ pipeline {
             '''
                     sh '''
                     echo 'Push to Repo'
-                    docker push yasirzia/cicd-e2e:${BUILD_NUMBER}
+                    docker push yasirzia/todo-app:${BUILD_NUMBER}
                     '''
                 }
             }
@@ -55,16 +55,27 @@ pipeline {
             steps {
                 script{
                     withCredentials([usernamePassword(credentialsId: 'f87a34a8-0e09-45e7-b9cf-6dc68feac670', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh '''
-                        cd python-jenkins-argocd-k8s
-                        cd deploy
-                        cat deploy.yaml
-                        sed -i '' "s/32/${BUILD_NUMBER}/g" deploy.yaml
-                        cat deploy.yaml
-                        git add deploy.yaml
-                        git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
-                        git remote -v
-                        git push https://github.com/yasirziaaulakh/Jenkins-Zero-To-Hero HEAD:main
+                         sh '''
+                cd python-jenkins-argocd-k8s/deploy
+                echo "Current deploy.yaml content:"
+                cat deploy.yaml
+
+                # Update the image tag with the build number
+                sed -i "s/yasirzia\/todo-app:.*/yasirzia\/todo-app:${BUILD_NUMBER}/" deploy.yaml
+
+                echo "Updated deploy.yaml content:"
+                cat deploy.yaml
+
+                # Git operations
+                git config --global user.email "yasirzia4@gmail.com"  # Update with your email
+                git config --global user.name "${GIT_USERNAME}"
+
+                git add deploy.yaml
+                git commit -m "Updated deploy.yaml with build number ${BUILD_NUMBER} | Jenkins Pipeline"
+
+                # Push changes to the repository
+                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/yasirziaaulakh/Jenkins-Zero-To-Hero HEAD:main
+                
                         '''                        
                     }
                 }
