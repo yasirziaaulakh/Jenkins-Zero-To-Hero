@@ -22,7 +22,7 @@ pipeline {
                     sh '''
                     cd python-jenkins-argocd-k8s
                     echo 'Buid Docker Image'
-                    docker build -t yasir/cicd-e2e:${BUILD_NUMBER} .
+                    docker build -t yasirzia/cicd-e2e:${BUILD_NUMBER} .
                     '''
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Push to Repo'
-                    docker push yasir/cicd-e2e:${BUILD_NUMBER}
+                    docker push yasirzia/cicd-e2e:${BUILD_NUMBER}
                     '''
                 }
             }
