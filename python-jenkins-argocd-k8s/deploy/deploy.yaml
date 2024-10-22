@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: todo
-        image: yasirzia/todo-app:${BUILD_NUMBER}
+        image: yasirzia/todo-app:17
         ports:
         - containerPort: 8000
