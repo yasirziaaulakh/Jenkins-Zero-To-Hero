@@ -61,7 +61,7 @@ pipeline {
                 cat deploy.yaml
 
                 # Update the image tag with the build number
-                sed -i "s/yasirzia/todo-app:.*/yasirzia/todo-app:${BUILD_NUMBER}/" deploy.yaml
+               sed -i 's|image: yasirzia/todo-app:.*|image: yasirzia/todo-app:${BUILD_NUMBER}|g' deploy.yaml
 
                 echo "Updated deploy.yaml content:"
                 cat deploy.yaml
